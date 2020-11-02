@@ -9,16 +9,8 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Howdie pf9!!!
+          Howdie PegB!!!
         </p>
-        <a
-          className="App-link"
-          href="https://platform9.com/signup"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Activate Your Platform9 Managed Kubernetes Free Tier
-        </a>      
       </header>
       <p>
           The current version of this app is: {packageJson.version}
