@@ -4,7 +4,7 @@ pipeline {
 	environment {
       GITHUB_REPO = "piyush7/jenkins-cicd"
       REPOSITORY_TAG="${DOCKERHUB_REGISTRY}:${env.BUILD_ID}"
-      APP_PATH="jenkins/webapp01"
+      APP_PATH="cicd/jenkins/webapp01"
  	}
     
     stages {
