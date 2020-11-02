@@ -1,0 +1,53 @@
+pipeline {
+	agent any
+	
+	environment {
+      GITHUB_REPO = "piyush7/jenkins-cicd"
+      REPOSITORY_TAG="${DOCKERHUB_REGISTRY}:${env.BUILD_ID}"
+      APP_PATH="jenkins/webapp01"
+ 	}
+    
+    stages {
+      
+    	stage ('PREPARATION') {
+        	steps {
+      
+          		cleanWs()
+              git url: "https://github.com/${GITHUB_REPO}"
+	        }
+	    }
+
+
+      stage ('BUILD') {
+        	steps {
+             sh 'npm install --prefix ${WORKSPACE}/${APP_PATH}'
+             
+        	}
+      }	
+
+      stage ('PUBLISH') {
+        	environment {
+              // make sure below credential is stored in Jenkins global credentials.
+            	registryCredential = 'dockerhub'
+          	}
+          	steps {
+
+               	 	script {
+                    	def appimage = docker.build ("${DOCKERHUB_REGISTRY}:${env.BUILD_ID}", "--network host ${WORKSPACE}/${APP_PATH}")
+                         	docker.withRegistry( '', registryCredential ) {
+                        	appimage.push()
+                        	appimage.push('latest')
+                    	}
+              	  	}
+
+          	}
+
+      }
+
+      stage ('DEPLOY') {
+         	steps {
+             sh 'envsubst < ${WORKSPACE}/${APP_PATH}/k8s/app.yaml | kubectl apply -f -'
+        	}
+        }
+      }
+}

@@ -1,0 +1,15 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: jenkins-routing
+spec:
+  rules:
+    - host: jenkins.platform9.horse
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: jenkins
+            servicePort: 8080
+...
